@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Agents Crash Course — googleadsagent.ai</title>
+<meta name="description" content="Free 5-Day AI Agents Crash Course by John Williams. 28 API Actions, 6 Sub-Agents, Built on Claude. googleadsagent.ai">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--g:#00c853;--g2:#00e676;--ga:rgba(0,200,83,.07);--gb:rgba(0,200,83,.14);
+--t:#d4d4d4;--t2:#888;--t3:#555;--b:#42a5f5;--a:#ffa726;--r:#ef5350;--p:#ab47bc;
+--mn:'JetBrains Mono',monospace;--sn:'DM Sans',sans-serif;--sw:260px}
+html{scroll-behavior:smooth}
+body{font-family:var(--sn);background:var(--bg);color:var(--t);line-height:1.75;font-size:15.5px}
+::selection{background:var(--g);color:var(--bg)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--t3);border-radius:3px}
+
+/* Sidebar */
+#sb{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--bg2);border-right:1px solid #1a1a1a;overflow-y:auto;z-index:100;transition:transform .3s}
+#sb .lg{padding:20px 16px 14px;border-bottom:1px solid #1a1a1a}
+#sb .lg h2{font-family:var(--mn);color:var(--g);font-size:12px;letter-spacing:1.5px}
+#sb .lg p{font-size:10px;color:var(--t3);margin-top:3px}
+#sb nav{padding:8px 0}
+#sb nav a{display:block;padding:7px 16px;color:var(--t2);text-decoration:none;font-size:12.5px;border-left:2px solid transparent;transition:all .12s}
+#sb nav a:hover{color:var(--g);background:var(--ga)}
+#sb nav a.active{color:var(--g);border-left-color:var(--g);background:var(--ga);font-weight:600}
+#sb nav .ns{padding:14px 16px 4px;font-size:9px;text-transform:uppercase;letter-spacing:2.5px;color:var(--t3);font-weight:700}
+#sb nav a.su{padding-left:32px;font-size:11px;color:var(--t3)}
+
+/* Main */
+#mn{margin-left:var(--sw);min-height:100vh}
+.pg{display:none;padding:36px 52px 72px;max-width:880px}
+.pg.active{display:block;animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Type */
+h1{font-size:2.2rem;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.2}
+h2{font-size:1.45rem;font-weight:600;color:#fff;margin:40px 0 14px;padding-bottom:6px;border-bottom:1px solid #1a1a1a}
+h3{font-size:1.1rem;font-weight:600;color:var(--g);margin:28px 0 10px}
+h4{font-size:.95rem;font-weight:600;color:var(--t);margin:20px 0 8px}
+p{margin-bottom:14px}
+a{color:var(--g);text-decoration:none}a:hover{text-decoration:underline}
+strong{color:#fff;font-weight:600}
+em{color:var(--t2)}
+hr{border:none;border-top:1px solid #1a1a1a;margin:28px 0}
+.g{color:var(--g)}
+.dim{color:var(--t3)}
+.ctr{text-align:center}
+kbd{background:var(--bg3);border:1px solid #333;padding:1px 6px;border-radius:3px;font-family:var(--mn);font-size:.85em}
+
+/* Callouts */
+.co{border-left:3px solid;padding:14px 18px;margin:18px 0;border-radius:0 5px 5px 0}
+.co-h{font-family:var(--mn);font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;font-weight:700}
+.co-b{font-size:14.5px}
+.co.scr{border-color:var(--g);background:rgba(0,200,83,.05)}.co.scr .co-h{color:var(--g)}
+.co.tip{border-color:var(--a);background:rgba(255,167,38,.05)}.co.tip .co-h{color:var(--a)}
+.co.wrn{border-color:var(--r);background:rgba(239,83,80,.05)}.co.wrn .co-h{color:var(--r)}
+.co.agt{border-color:var(--g);background:rgba(0,200,83,.07)}.co.agt .co-h{color:var(--g)}
+.co.cit{border-color:var(--b);background:rgba(66,165,245,.05)}.co.cit .co-h{color:var(--b)}
+
+/* Code */
+pre{background:#050505;border:1px solid #1a1a1a;border-radius:5px;padding:14px 18px;margin:14px 0;overflow-x:auto;position:relative}
+pre code{font-family:var(--mn);font-size:12.5px;color:var(--g);line-height:1.65;white-space:pre-wrap}
+code{font-family:var(--mn);font-size:.88em;color:var(--g);background:var(--bg3);padding:1px 5px;border-radius:3px}
+.cp{position:absolute;top:6px;right:6px;background:var(--bg3);border:1px solid #333;color:var(--t3);font-family:var(--mn);font-size:10px;padding:3px 8px;border-radius:3px;cursor:pointer}.cp:hover{color:var(--g);border-color:var(--g)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+thead{border-bottom:2px solid var(--g)}
+th{text-align:left;padding:8px 10px;color:var(--g);font-family:var(--mn);font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+td{padding:8px 10px;border-bottom:1px solid #1a1a1a;color:var(--t2)}
+tr:hover td{background:var(--ga)}
+
+/* Steps */
+.st{display:flex;gap:10px;margin:10px 0;padding:6px 0}
+.sn{min-width:26px;height:26px;border-radius:50%;background:var(--g);color:var(--bg);font-family:var(--mn);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.sb{flex:1}
+
+/* Quiz */
+.qz{background:var(--bg3);border:1px solid #222;border-radius:6px;padding:20px;margin:24px 0}
+.qz h4{color:var(--g);margin:0 0 14px;font-family:var(--mn);font-size:12px;text-transform:uppercase;letter-spacing:1.5px}
+.qq{margin-bottom:14px}
+.qq p{margin-bottom:6px;font-weight:600;color:#fff;font-size:14px}
+.qq textarea{width:100%;background:var(--bg);border:1px solid #333;color:var(--t);padding:8px;border-radius:4px;font-family:var(--sn);font-size:13.5px;min-height:50px;resize:vertical}
+.qq textarea:focus{outline:none;border-color:var(--g)}
+.qh{margin-top:6px;padding:10px;border-radius:4px;background:rgba(0,200,83,.07);border:1px solid rgba(0,200,83,.2);font-size:13px;color:var(--g)}
+.qb{background:var(--g);color:var(--bg);border:none;padding:8px 20px;font-family:var(--mn);font-size:12px;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:1px}.qb:hover{background:var(--g2)}
+
+/* Learning Objectives / Takeaways */
+.lo,.kt{border:1px solid #1a1a1a;border-radius:6px;padding:16px 20px;margin:18px 0}
+.lo{border-left:3px solid var(--b);background:rgba(66,165,245,.04)}
+.lo h4{color:var(--b);font-family:var(--mn);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 10px}
+.kt{border-left:3px solid var(--g);background:rgba(0,200,83,.04)}
+.kt h4{color:var(--g);font-family:var(--mn);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 10px}
+.lo ul,.kt ul{padding-left:20px}.lo li,.kt li{margin-bottom:6px;font-size:14px}
+
+/* Tags/Badges */
+.tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:20px 0}
+.tag{font-family:var(--mn);font-size:10px;padding:3px 8px;border-radius:3px;letter-spacing:.5px}
+.tag.g{background:rgba(0,200,83,.14);color:var(--g)}.tag.b{background:rgba(66,165,245,.14);color:var(--b)}
+.tag.a{background:rgba(255,167,38,.14);color:var(--a)}.tag.p{background:rgba(171,71,188,.14);color:var(--p)}
+
+/* Hero */
+.hero{padding:60px 0 30px;text-align:center}
+.hero .mono{font-family:var(--mn);color:var(--g);font-size:13px;letter-spacing:2px;margin-bottom:12px}
+.hero h1{font-size:2.8rem;margin-bottom:6px}
+.hero .sub{font-size:1.05rem;color:var(--t2);margin-bottom:4px}
+.hero .sub2{font-size:.9rem;color:var(--t3);font-style:italic;margin-bottom:24px}
+.ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;padding:10px 22px;border-radius:4px;font-family:var(--mn);font-size:12px;font-weight:700;letter-spacing:1px;transition:all .12s;text-decoration:none!important}
+.btn.pri{background:var(--g);color:var(--bg)}.btn.pri:hover{background:var(--g2)}
+.btn.sec{border:1px solid var(--g);color:var(--g)}.btn.sec:hover{background:var(--ga)}
+
+/* References list */
+.ref-list p{padding-left:32px;text-indent:-32px;margin-bottom:12px;font-size:14px;color:var(--t2)}
+
+/* Progress */
+#pb{position:fixed;top:0;left:var(--sw);right:0;height:2px;background:var(--g);width:0%;z-index:99;transition:width .3s}
+
+/* Mobile */
+#mt{display:none;position:fixed;top:10px;left:10px;z-index:200;background:var(--bg2);border:1px solid #333;color:var(--g);width:36px;height:36px;border-radius:4px;cursor:pointer;font-size:16px;align-items:center;justify-content:center}
+@media(max-width:768px){
+  #sb{transform:translateX(-100%)}#sb.open{transform:translateX(0)}
+  #mn{margin-left:0}.pg{padding:16px 14px 48px}
+  .hero h1{font-size:1.8rem}#mt{display:flex}#pb{left:0}
+  table{font-size:12px}th,td{padding:6px}
+}
+</style>
+</head>
+<body>
+<button id="mt" onclick="document.getElementById('sb').classList.toggle('open')">☰</button>
+<div id="pb"></div>
+<aside id="sb">
+  <div class="lg"><h2>GOOGLEADSAGENT.AI</h2><p>AI Agents Crash Course v4.0</p></div>
+  <nav><div class="ns">Start</div><a href="#" onclick="go('home')" class="active">⬡ Home</a><a href="#" onclick="go('preface')">◈ Preface</a><a href="#" onclick="go('summary')">◆ Executive Summary</a><div class="ns">Setup</div><a href="#" onclick="go('setup')">⚙ Section 0: Setup</a><div class="ns">Curriculum</div><a href="#" onclick="go('day1')">01 AI Agents</a><a href="#" onclick="go('day1')" class="su">🎮 Tetris</a><a href="#" onclick="go('day2')">02 Tools & MCP</a><a href="#" onclick="go('day2')" class="su">🎮 Zelda</a><a href="#" onclick="go('day3')">03 Context Engineering</a><a href="#" onclick="go('day3')" class="su">🎮 Football</a><a href="#" onclick="go('day4')">04 Agent Quality</a><a href="#" onclick="go('day4')" class="su">🎮 Mario</a><a href="#" onclick="go('day5')">05 Production</a><a href="#" onclick="go('day5')" class="su">🎮 Duck Hunt + RPG</a><div class="ns">Reference</div><a href="#" onclick="go('appendixA')">◇ Resources</a><a href="#" onclick="go('glossary')">◇ Glossary</a><a href="#" onclick="go('appendixC')">◇ Agent Reference</a><a href="#" onclick="go('refs')">◇ References</a><a href="#" onclick="go('about')">◇ About Author</a><div class="ns">Links</div><a href="https://github.com/itallstartedwithaidea/ai-agents-crash-course" target="_blank">↗ GitHub Repo</a><a href="https://googleadsagent.ai" target="_blank">↗ googleadsagent.ai</a><a href="https://www.linkedin.com/posts/johnmichaelwilliams_ai-agent-crash-course-by-googeladsagentai-ugcPost-7431927834031431680-hul9?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAnRhHoBx-6mp4f4ZEwKYTwJ83yt2kMbM5I" target="_blank">↗ LinkedIn Post</a></nav>
+</aside>
+<main id="mn"><section class="pg active" id="pg-home">
+<div class="hero">
+  <div class="mono">googleadsagent.ai</div>
+  <h1>The Complete 5-Day<br><span class="g">AI Agents Crash Course</span></h1>
+  <p class="sub">From Absolute Zero to Deploying Multi-Agent Systems</p>
+  <p class="sub2">A Step-by-Step Tutorial for Every Experience Level</p>
+  <div class="tags">
+    <span class="tag g">FREE</span><span class="tag g">OPEN SOURCE</span><span class="tag g">28 ACTIONS</span>
+    <span class="tag g">6 SUB-AGENTS</span><span class="tag b">5 WHITE PAPERS</span><span class="tag b">MCP + A2A</span>
+    <span class="tag a">5 GAMES</span><span class="tag p">APA 7th</span><span class="tag g">42 PAGES</span>
+  </div>
+  <div class="ctas">
+    <a href="https://github.com/itallstartedwithaidea/ai-agents-crash-course" target="_blank" class="btn pri">↗ GITHUB REPO</a>
+    <a href="https://googleadsagent.ai" target="_blank" class="btn sec">↗ LIVE AGENT</a>
+    <a href="https://www.linkedin.com/posts/johnmichaelwilliams_ai-agent-crash-course-by-googeladsagentai-ugcPost-7431927834031431680-hul9?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAnRhHoBx-6mp4f4ZEwKYTwJ83yt2kMbM5I" target="_blank" class="btn sec">↗ LINKEDIN POST</a>
+  </div>
+</div>
+<hr>
+<h2>Author</h2>
+<p><strong>John Williams</strong> — Senior Paid Media Specialist at <a href="https://seerinteractive.com" target="_blank">Seer Interactive</a>. 15+ years, $48M+ managed. Creator of <a href="https://googleadsagent.ai" target="_blank">googleadsagent.ai</a>. <a href="https://paidsearch.org/event/hero-conf-2025-san-diego/" target="_blank">Hero Conf</a> speaker. Former WSU football (2002–2005). Casteel HS assistant coach.</p>
+
+<h2>Choose Your Path</h2>
+<table><thead><tr><th>Path</th><th>Who</th><th>Focus</th><th>Time/Day</th></tr></thead><tbody><tr><td><span class='tag g'>🟢 OBSERVER</span></td><td>Executives, strategists</td><td>Concepts only</td><td>2–3 hrs</td></tr><tr><td><span class='tag b'>🔵 BUILDER</span></td><td>Marketers, analysts</td><td>Hands-on + games</td><td>4–6 hrs</td></tr><tr><td><span class='tag p'>🟣 ARCHITECT</span></td><td>Developers, engineers</td><td>Deep theory + prod</td><td>6–8 hrs</td></tr></tbody></table>
+
+<h2>5-Day Curriculum</h2>
+<table><thead><tr><th>Day</th><th>Topic</th><th>White Paper</th><th>Game</th></tr></thead><tbody><tr><td><strong>0</strong></td><td>Environment Setup</td><td>—</td><td>—</td></tr><tr><td><strong>1</strong></td><td>Introduction to AI Agents</td><td>Introduction to Agents</td><td>🎮 Tetris</td></tr><tr><td><strong>2</strong></td><td>Agent Tools & MCP</td><td>Agent Tools & MCP</td><td>🎮 Zelda</td></tr><tr><td><strong>3</strong></td><td>Context Engineering</td><td>Sessions & Memory</td><td>🎮 Football</td></tr><tr><td><strong>4</strong></td><td>Agent Quality</td><td>Agent Quality</td><td>🎮 Mario</td></tr><tr><td><strong>5</strong></td><td>Production & Multi-Agent</td><td>Prototype to Production</td><td>🎮 Duck Hunt + RPG</td></tr></tbody></table>
+
+<h2>The googleadsagent.ai Through-Line</h2>
+<div class="co agt"><div class="co-h">🤖 GOOGLEADSAGENT.AI</div><div class="co-b">An open-source AI agent with <strong>28 custom Python API actions</strong> and <strong>6 Disney-named sub-agents</strong> (🦁 Simba, 🐠 Nemo, ❄️ Elsa, 🧞 Aladdin, 🌊 Moana, 🤖 Baymax) managing Google Ads via live API. Built on Claude. Every course concept maps to a real component.</div></div>
+<table><thead><tr><th>Concept</th><th>Implementation</th><th>Day</th></tr></thead><tbody><tr><td>Brain</td><td>Claude by Anthropic (Opus 4.5 + Sonnet 4.5)</td><td>1</td></tr><tr><td>Tools</td><td>28 Python API actions with live read/write</td><td>2</td></tr><tr><td>MCP</td><td>Adapter layer: <code>tool_executor.py</code></td><td>2</td></tr><tr><td>Context</td><td>CEP Protocol + Session State Manager</td><td>3</td></tr><tr><td>Quality</td><td>Top-Down Reporting + CONFIRM write-safety</td><td>4</td></tr><tr><td>Multi-Agent</td><td>🦁 Simba · 🐠 Nemo · ❄️ Elsa · 🧞 Aladdin · 🌊 Moana · 🤖 Baymax</td><td>5</td></tr><tr><td>Production</td><td>CLI · REST API · Docker · Python SDK</td><td>5</td></tr></tbody></table>
+<p class="ctr dim">Version 4.0 · February 2026 · Free & Open Source · It All Started With A Idea</p>
+</section><section class="pg" id="pg-preface">
+<h1>Preface</h1>
+<h2>Why This Course Exists</h2>
+<p>In 15+ years of managing over $48 million in digital advertising spend across Google Ads, Meta, Microsoft, and Amazon — at NortonLifeLock, Gen Digital, Avast, and Farmers Insurance — I've watched the industry transform three times. Programmatic buying. ML bidding. And now, the <strong>agentic era</strong>.</p>
+<p>The industry is moving from AI that <em>suggests</em> to AI that <em>acts</em>. Google CEO Sundar Pichai declared at I/O 2025 that agentic capabilities represent "the direction where we are investing the most," and predicted 2026 as "the year people use agentic experiences more broadly" (Alphabet Inc., 2025).</p>
+<p>I built <a href="https://googleadsagent.ai" target="_blank">googleadsagent.ai</a> — 28 API actions, 6 sub-agents, live Google Ads access, built on Claude — because this future was arriving faster than practitioners realized.</p>
+<div class="co cit"><div class="co-h">📖 CITATION</div><div class="co-b"><em>"We think of agents as systems that combine the intelligence of advanced AI models with access to tools, so they can take actions on your behalf and under your control."</em><br>— Sundar Pichai, Google I/O 2025 · <a href="https://blog.google/innovation-and-ai/technology/ai/io-2025-keynote/" target="_blank">source ↗</a></div></div>
+<div class="co cit"><div class="co-h">📖 CITATION</div><div class="co-b"><em>"Over the last year, we have been investing in developing more agentic models, meaning they can understand more about the world around you, think multiple steps ahead, and take action on your behalf."</em><br>— Demis Hassabis, Gemini 2.0 Launch · <a href="https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/" target="_blank">source ↗</a></div></div>
+<h2>How to Use This Course</h2>
+<p><strong>Sequential:</strong> Section 0 → Day 1 → Day 5. Best for first-time learners.</p>
+<p><strong>Reference:</strong> Sidebar navigation. Each section is self-contained.</p>
+<p><strong>Workshop:</strong> Each day has labs, games, and assessments — classroom-ready.</p>
+<p><strong>Quick scan:</strong> Executive Summary + Glossary + Resource Library.</p>
+<h2>Acknowledgments</h2>
+<p>Google's Kaggle team (Wiesinger, Marlow, Vuskovic) for the white paper series. Anthropic's MCP and Claude. Google's A2A team. LangChain, CrewAI, AutoGen communities. Microsoft's AI Agents course. Colleagues at Seer Interactive and Casteel High School coaching staff.</p>
+</section><section class="pg" id="pg-summary">
+<h1>Executive Summary</h1>
+<p>AI agents — autonomous systems that reason, plan, and execute — are replacing dashboards and manual optimization. Google, Anthropic, OpenAI, and Microsoft are investing billions.</p>
+<p>This 5-day course covers: <strong>(1)</strong> Agent fundamentals and ReAct loops; <strong>(2)</strong> Tool architecture and MCP; <strong>(3)</strong> Context engineering and scratchpad patterns; <strong>(4)</strong> Evaluation, observability, and guardrails; <strong>(5)</strong> Multi-agent orchestration, A2A, and Google's Universal Commerce Protocol.</p>
+<p>Each day: required readings · resource matrix · hands-on labs · screen verification callouts · vibe coding game · learning objectives · key takeaways · self-assessment.</p>
+<p>Three paths (🟢 Observer, 🔵 Builder, 🟣 Architect). Free. Open source. 42 pages. APA 7th Edition.</p>
+</section><section class="pg" id="pg-setup">
+<h1>Section 0: <span class="g">Complete Environment Setup</span></h1>
+<p>Install and verify all tools before Day 1. Time: 30–45 minutes.</p>
+
+<h2>Part A: Claude AI</h2>
+<p>Primary AI assistant. Powers googleadsagent.ai.</p>
+<div class="st"><div class="sn">1</div><div class="sb">Navigate to <a href='https://claude.ai'>claude.ai</a>. Any modern browser.</div></div><div class="st"><div class="sn">2</div><div class="sb">Sign Up → Continue with Google (fastest) or email.</div></div><div class="st"><div class="sn">3</div><div class="sb">Email: enter address, retrieve 6-digit code, enter it.</div></div><div class="st"><div class="sn">4</div><div class="sb">Phone verification (SMS). One phone per account; 18+.</div></div><div class="st"><div class="sn">5</div><div class="sb">Accept Terms of Service.</div></div><div class="st"><div class="sn">6</div><div class="sb">Chat interface loads. Ready.</div></div>
+<div class="co scr"><div class="co-h">💻 WHAT YOU SHOULD SEE</div><div class="co-b">Clean interface with 'What can I help you with?' input. Left sidebar: New Chat + history. Account icon bottom-left.</div></div>
+<table><thead><tr><th>Feature</th><th>Free</th><th>Pro ($20/mo)</th></tr></thead><tbody><tr><td>Model</td><td>Sonnet</td><td>Opus (most intelligent)</td></tr><tr><td>Messages/day</td><td>~30–45</td><td>5× more</td></tr><tr><td>Uploads / Artifacts / Search</td><td>✅</td><td>✅</td></tr></tbody></table>
+<div class="co tip"><div class="co-h">💡 PRO TIP</div><div class="co-b">Free tier is sufficient for this entire course. googleadsagent.ai early prototypes were built on free tier.</div></div>
+<h3>Verification</h3>
+<pre><code>You are a Research Agent. Explain what an AI agent is in\n3 sentences as if speaking to a colleague at a coffee shop,\nthen provide one real-world example.</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+
+<h2>Part B: ChatGPT</h2>
+<div class="st"><div class="sn">1</div><div class="sb">Go to <a href='https://chatgpt.com'>chatgpt.com</a>. Sign up.</div></div><div class="st"><div class="sn">2</div><div class="sb">Complete verification. Chat loads.</div></div>
+
+<h2>Part C: Cursor IDE</h2>
+<p>"Vibe coding" — describe what you want, AI writes the code (Karpathy, 2025).</p>
+<div class="st"><div class="sn">1</div><div class="sb"><a href='https://cursor.com'>cursor.com</a> → Download (auto-detects OS).</div></div><div class="st"><div class="sn">2</div><div class="sb">Install. Launch. Sign in via gear icon.</div></div><div class="st"><div class="sn">3</div><div class="sb">Open AI Chat: <kbd>Cmd+I</kbd> (Mac) / <kbd>Ctrl+I</kbd> (Win).</div></div>
+<div class="co scr"><div class="co-h">💻 WHAT YOU SHOULD SEE</div><div class="co-b">Three panels: Left = File Explorer. Center = editor. Bottom = Terminal. Right = AI Chat.</div></div>
+
+<h2>Part D: Kaggle</h2>
+<div class="st"><div class="sn">1</div><div class="sb"><a href='https://kaggle.com'>kaggle.com</a> → Register.</div></div><div class="st"><div class="sn">2</div><div class="sb"><strong>Phone verify:</strong> Settings → Phone Verification.</div></div>
+<div class="co wrn"><div class="co-h">⚠️ CRITICAL</div><div class="co-b">Phone verification is MANDATORY for running the interactive Codelabs with the white papers.</div></div>
+
+<h2>Part E: GitHub</h2>
+<div class="st"><div class="sn">1</div><div class="sb"><a href='https://github.com'>github.com</a> → Sign Up. Verify email.</div></div><div class="st"><div class="sn">2</div><div class="sb">Bookmark: <a href='https://github.com/sameeerjadhav/google-agents-resources'>White Papers</a> · <a href='https://github.com/microsoft/ai-agents-for-beginners'>Microsoft Course</a> · <a href='https://github.com/a2aproject/A2A'>A2A</a> · <a href='https://github.com/modelcontextprotocol'>MCP</a></div></div>
+
+<h2>Part F: Python 3.12+</h2>
+<div class="st"><div class="sn">1</div><div class="sb"><a href='https://python.org/downloads'>python.org</a> → Download 3.12+.</div></div><div class="st"><div class="sn">2</div><div class="sb"><strong>CHECK 'Add Python to PATH'</strong> before Install.</div></div><div class="st"><div class="sn">3</div><div class="sb">Verify: <code>python --version</code> → 3.12.x</div></div>
+
+<h2>Pre-Course Checklist</h2>
+<table><thead><tr><th>Tool</th><th>Action</th><th>Verify</th></tr></thead><tbody><tr><td>Claude</td><td>Account at claude.ai</td><td>Test prompt works</td></tr><tr><td>ChatGPT</td><td>Account at chatgpt.com</td><td>Test prompt works</td></tr><tr><td>Cursor</td><td>Downloaded + installed</td><td>Editor visible</td></tr><tr><td>Kaggle</td><td>Account + phone verified</td><td>Notebooks accessible</td></tr><tr><td>GitHub</td><td>Account created</td><td>4 repos bookmarked</td></tr><tr><td>Python</td><td>Installed with PATH</td><td>python --version = 3.12+</td></tr></tbody></table>
+<p><strong>All verified? → Day 1.</strong></p>
+</section><section class="pg" id="pg-day1">
+<h1>Day 1: <span class="g">Introduction to AI Agents</span></h1>
+<div class="co agt"><div class="co-h">🤖 GOOGLEADSAGENT.AI</div><div class="co-b">googleadsagent.ai is a production AI agent — not a chatbot. It has a brain (Claude), tools (28 API actions with live Google Ads access), and an orchestration loop (6 Disney-named sub-agents: 🦁 Simba for reporting, 🐠 Nemo for research, ❄️ Elsa for optimization, 🧞 Aladdin for Shopping/PMax, 🌊 Moana for creative, 🤖 Baymax for innovation).</div></div>
+<div class="lo"><h4>🎯 Learning Objectives</h4><ul><li>Define an AI agent and distinguish it from a chatbot</li><li>Identify the three components: Brain, Tools, Loop</li><li>Explain the ReAct loop and autonomous reasoning</li><li>Compare five agent architecture patterns</li><li>Build a functional game with vibe coding</li></ul></div>
+
+<h2>What Is an AI Agent?</h2>
+<p>An AI agent is software that uses a large language model as its reasoning engine to <strong>autonomously perceive, decide, and act</strong> to accomplish goals (Google, 2025). The key difference from a chatbot is <em>autonomy</em>: agents decompose goals, select tools, execute, evaluate, and iterate.</p>
+<div class="co cit"><div class="co-h">📖 CITATION</div><div class="co-b"><em>"This combination of reasoning, logic, and access to external information that are all connected to a Generative AI model invokes the concept of an agent."</em><br>— Google, 'Introduction to Agents' White Paper · <a href="https://kaggle.com/whitepaper-agents" target="_blank">source ↗</a></div></div>
+<p><strong>Analogy:</strong> Ask a chatbot about vacation → it describes beaches. Give an agent the same request → it researches flights, compares prices, books the optimal option, reserves a hotel, adds calendar entries, sends confirmation. The chatbot generates text. The agent generates <em>outcomes</em>.</p>
+
+<h2>The Three Components</h2>
+<h3>1. The Brain (Foundation Model)</h3>
+<p>Claude, GPT-4, or Gemini — the reasoning engine. Interprets intent, formulates plans, selects tools. In googleadsagent.ai: Claude Opus 4.5 for complex reasoning, Sonnet 4.5 for creative tasks.</p>
+<h3>2. The Tools</h3>
+<p>Executable functions: APIs, databases, search engines, file systems. Without tools, the model reasons but cannot act. googleadsagent.ai: 28 Python API actions in <code>actions/main-agent/</code>.</p>
+<table><thead><tr><th>Category</th><th>Example Actions</th><th>Count</th></tr></thead><tbody><tr><td>Campaign</td><td>Budget Manager, RSA Ad Manager, Campaign Creator</td><td>6</td></tr><tr><td>Analysis</td><td>Search Term Manager, Device Performance, Change History</td><td>5</td></tr><tr><td>Optimization</td><td>Recommendations, Bidding Strategy, Ad Schedule</td><td>4</td></tr><tr><td>Organization</td><td>Label Manager, Negative Keywords, Asset Manager</td><td>3</td></tr><tr><td>Targeting</td><td>Audience Manager, Geo & Location Manager</td><td>2</td></tr><tr><td>Infrastructure</td><td>API Gateway, Session Manager, Package Installer</td><td>6</td></tr><tr><td>Creative</td><td>Cloudinary Creative Tools</td><td>1</td></tr><tr><td>PMax</td><td>PMax Asset Group Manager</td><td>1</td></tr></tbody></table>
+<h3>3. The Loop (ReAct Orchestration)</h3>
+<p><strong>Reason → Act → Observe → Repeat.</strong> googleadsagent.ai's "The Loop":</p>
+<div class="st"><div class="sn">1</div><div class="sb">User submits a question.</div></div><div class="st"><div class="sn">2</div><div class="sb"><strong>CEP Protocol:</strong> Agent asks clarifying questions (Account? Date range? Threshold?).</div></div><div class="st"><div class="sn">3</div><div class="sb">Top-Down Reporting: account summary first, then drill-down.</div></div><div class="st"><div class="sn">4</div><div class="sb">Adapter Layer: load action → inject secrets → filter → execute via <code>tool_executor.py</code>.</div></div><div class="st"><div class="sn">5</div><div class="sb">Google Ads API: real data, real mutations, all costs in dollars.</div></div><div class="st"><div class="sn">6</div><div class="sb">Claude analyzes, validates completeness against account totals.</div></div><div class="st"><div class="sn">7</div><div class="sb"><strong>Write Safety:</strong> Writes require CONFIRM with current-vs-proposed preview.</div></div><div class="st"><div class="sn">8</div><div class="sb">Heavy tasks delegated to Disney-named sub-agents.</div></div>
+
+<h2>Chatbot vs. Agent</h2>
+<table><thead><tr><th>Dimension</th><th>Chatbot</th><th>AI Agent</th></tr></thead><tbody><tr><td>Interaction</td><td>Reactive (responds)</td><td>Goal-directed (pursues)</td></tr><tr><td>Memory</td><td>Single conversation</td><td>Persistent across sessions</td></tr><tr><td>Tools</td><td>None (text only)</td><td>APIs, databases, search, files</td></tr><tr><td>Error Recovery</td><td>'I don't know'</td><td>Tries alternatives</td></tr><tr><td>Output</td><td>Text responses</td><td>Real-world actions</td></tr><tr><td>Verification</td><td>None</td><td>Cross-validates data</td></tr><tr><td>Example</td><td>Claude answering a question</td><td>googleadsagent.ai auditing $50K/mo</td></tr></tbody></table>
+
+<h2>Architecture Patterns</h2>
+<table><thead><tr><th>Pattern</th><th>Mechanism</th><th>Use Case</th><th>Example</th></tr></thead><tbody><tr><td>ReAct (Single)</td><td>Think→Act→Observe loop</td><td>Focused tasks</td><td>Search agent</td></tr><tr><td>Router</td><td>Classify + delegate</td><td>Multi-domain</td><td>Customer service triage</td></tr><tr><td>Parallel Multi-Agent</td><td>Concurrent execution</td><td>Independent tasks</td><td>Multi-source research</td></tr><tr><td>Sequential Multi-Agent</td><td>Pipeline: A→B→C</td><td>Dependent workflows</td><td>googleadsagent.ai audits</td></tr><tr><td>Hierarchical</td><td>Manager → workers</td><td>Enterprise scale</td><td>Automated campaign mgmt</td></tr></tbody></table>
+
+<h2>Required Reading</h2>
+<p><strong>Primary:</strong> Google & Kaggle. (2025). "Introduction to Agents." <a href="https://kaggle.com/whitepaper-agents" target="_blank">kaggle.com/whitepaper-agents ↗</a></p>
+<p><strong>Supplementary:</strong> Microsoft. AI Agents for Beginners, Lessons 1–3. <a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank">GitHub ↗</a></p>
+
+<h2>Resource Matrix</h2>
+<table><thead><tr><th>Resource</th><th>Format</th><th>Cost</th></tr></thead><tbody><tr><td>Google/Kaggle: Introduction to Agents</td><td>White Paper (42 pp.)</td><td>Free</td></tr><tr><td>Microsoft: AI Agents for Beginners</td><td>Course (12 lessons)</td><td>Free</td></tr><tr><td>Hugging Face: AI Agents Course</td><td>Course + Certificate</td><td>Free</td></tr><tr><td>DeepLearning.AI: Agents in LangGraph</td><td>Short Course</td><td>Free</td></tr><tr><td>Agent Academy</td><td>Course + Certificate</td><td>Free</td></tr></tbody></table>
+
+<h2>Lab 1A: Agent-Style Reasoning</h2>
+<div class="st"><div class="sn">1</div><div class="sb">Open Claude. New conversation.</div></div><div class="st"><div class="sn">2</div><div class="sb">Enter this prompt:</div></div>
+<pre><code>You are a Google Ads Audit Agent. A client runs 15 Search\ncampaigns at $50,000/month. CPA has increased 40% over 3 months.\n\nCreate a systematic audit plan. For each step, specify:\n(a) The exact data required\n(b) The API endpoint or tool to retrieve it\n(c) Metrics and red flags to evaluate\n(d) Conditional recommendations based on findings</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+<div class="co scr"><div class="co-h">💻 WHAT YOU SHOULD SEE</div><div class="co-b">Claude produces a 6–10 step audit plan with data requirements, API endpoints, metrics, and conditional recommendations — mirroring googleadsagent.ai's Audit Agent workflow.</div></div>
+
+<h2>🎮 Vibe Coding: Tetris</h2>
+<div class="st"><div class="sn">1</div><div class="sb">Open Claude. New conversation.</div></div><div class="st"><div class="sn">2</div><div class="sb">Enter:</div></div>
+<pre><code>Build a fully playable Tetris game as a single HTML file.\n- Classic rules: 7 tetrominoes, rotation, line clearing\n- Arrow keys to move/rotate, spacebar for hard drop\n- Score, next piece preview, level progression\n- Game over + restart, dark bg, smooth animations\n- Ghost piece showing landing position</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+<div class="co scr"><div class="co-h">💻 WHAT YOU SHOULD SEE</div><div class="co-b">Fully playable Tetris in Claude's Artifact panel. Arrow keys control. Spacebar hard-drops. Lines clear with animation. Ghost piece visible.</div></div>
+<div class="co tip"><div class="co-h">💡 PRO TIP</div><div class="co-b">To iterate: 'Add hold-piece (C key)' or 'Add touch controls for mobile.'</div></div>
+
+<div class="kt"><h4>✅ Key Takeaways</h4><ul><li>Agents differ from chatbots in autonomy, tool access, and iterative reasoning.</li><li>Every agent: Brain (LLM) + Tools (functions) + Loop (ReAct orchestration).</li><li>googleadsagent.ai: Claude as Brain, 28 actions as Tools, The Loop as orchestration.</li><li>Vibe coding — natural-language software development — is the foundational agent skill.</li></ul></div>
+
+<div class="qz">
+<h4>🧪 Self-Assessment</h4>
+<div class="qq"><p>1. Explain the ReAct loop using an analogy a non-technical colleague would understand.</p>
+<textarea id="q1-0" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q1-h0" style="display:none">The ReAct loop is like a detective: Think about what to investigate → Take an action (interview, search records) → Observe results → Think again → Repeat until solved. Each cycle builds on previous findings.</div></div><div class="qq"><p>2. Name three differences between a chatbot and an AI agent.</p>
+<textarea id="q1-1" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q1-h1" style="display:none">1) Agents use tools to take real actions; chatbots only generate text. 2) Agents maintain memory across sessions. 3) Agents autonomously pursue goals; chatbots react to individual prompts.</div></div><div class="qq"><p>3. Map Brain, Tools, and Loop to specific googleadsagent.ai components.</p>
+<textarea id="q1-2" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q1-h2" style="display:none">Brain = Claude (Opus 4.5 / Sonnet 4.5). Tools = 28 Python API actions. Loop = The Loop architecture with CEP Protocol → sub-agent delegation → validation.</div></div><div class="qq"><p>4. Name all 6 sub-agents and their specializations.</p>
+<textarea id="q1-3" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q1-h3" style="display:none">🦁 Simba: Reporting. 🐠 Nemo: Research. ❄️ Elsa: Optimization. 🧞 Aladdin: Shopping/PMax. 🌊 Moana: Creative. 🤖 Baymax: Creative Innovation.</div></div><div class="qq"><p>5. When would an agent be unnecessarily complex?</p>
+<textarea id="q1-4" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q1-h4" style="display:none">For simple one-shot questions ('What's 2+2?'), lookup tasks, or when the answer is in the prompt. If no tools, memory, or multi-step reasoning is needed, a direct prompt suffices.</div></div>
+<button class="qb" onclick="showHints('q1',5)">CHECK MY THINKING</button>
+</div>
+</section><section class="pg" id="pg-day2">
+<h1>Day 2: <span class="g">Agent Tools & MCP</span></h1>
+<div class="co agt"><div class="co-h">🤖 GOOGLEADSAGENT.AI</div><div class="co-b">Each of googleadsagent.ai's 28 API actions is a tool. The adapter layer (<code>tool_executor.py</code>) loads actions, injects credentials, filters parameters, and executes — standardized interface between brain and Google Ads API. MCP formalizes this as an industry standard.</div></div>
+<div class="lo"><h4>🎯 Learning Objectives</h4><ul><li>Explain how agents use tools to interact with external systems</li><li>Trace the six-step tool-use execution cycle</li><li>Define MCP and its three architectural components</li><li>Analyze implications of universal tool interoperability</li><li>Design a tool schema for an MCP server</li></ul></div>
+
+<h2>The Tool-Use Cycle</h2>
+<div class="st"><div class="sn">1</div><div class="sb"><strong>Goal Reception:</strong> User provides objective ('Find wasted spend').</div></div><div class="st"><div class="sn">2</div><div class="sb"><strong>Reasoning:</strong> LLM determines tool needed ('Search Term Manager').</div></div><div class="st"><div class="sn">3</div><div class="sb"><strong>Structured Call:</strong> LLM outputs formatted request: <code>{{ action: 'search_term_manager', params: {{ date_range: '30d' }} }}</code></div></div><div class="st"><div class="sn">4</div><div class="sb"><strong>Execution:</strong> Infrastructure processes request. <code>tool_executor.py</code> loads action, injects credentials, calls API.</div></div><div class="st"><div class="sn">5</div><div class="sb"><strong>Result Injection:</strong> Raw API data returned to LLM context.</div></div><div class="st"><div class="sn">6</div><div class="sb"><strong>Synthesis:</strong> LLM interprets: 'You're spending $3,200/month on irrelevant terms. Here are 15 negative keyword recommendations.'</div></div>
+
+<h2>Tool Categories in googleadsagent.ai</h2>
+<table><thead><tr><th>Category</th><th>Actions</th><th>Count</th></tr></thead><tbody><tr><td>Campaign</td><td>Budget, Campaign Creator, RSA Ad Manager, Bid & Keyword, Mutate, Campaign & Ad Group</td><td>6</td></tr><tr><td>Analysis</td><td>Search Term, Query Planner, Device Performance, Change History, Conversion Tracking</td><td>5</td></tr><tr><td>Optimization</td><td>Recommendations, Bidding Strategy, Experiments, Ad Schedule</td><td>4</td></tr><tr><td>Organization</td><td>Label Manager, Negative Keywords, Asset Manager</td><td>3</td></tr><tr><td>Targeting</td><td>Audience Manager, Geo & Location Manager</td><td>2</td></tr><tr><td>Infrastructure</td><td>API Gateway, Session Manager, Package Installer, Scripts, Account Access, Check User</td><td>6</td></tr><tr><td>Creative / PMax</td><td>Cloudinary Creative Tools, PMax Asset Group Manager</td><td>2</td></tr></tbody></table>
+
+<h2>Model Context Protocol (MCP)</h2>
+<p>MCP is an open standard by Anthropic (Nov 2024) providing a <strong>universal interface</strong> for connecting AI to tools. Analogy: <strong>USB-C</strong> — before it, every device needed a unique cable. Before MCP, every AI app needed custom integration code. MCP standardizes the connection.</p>
+<div class="co cit"><div class="co-h">📖 CITATION</div><div class="co-b"><em>"We're excited to announce that our Gemini API and SDK are now compatible with MCP tools."</em><br>— Sundar Pichai, Google I/O 2025 · <a href="https://blog.google/innovation-and-ai/technology/ai/io-2025-keynote/" target="_blank">source ↗</a></div></div>
+<h3>MCP Architecture</h3>
+<p><strong>Host:</strong> The AI application (Claude Desktop, Cursor). User-facing interface.</p>
+<p><strong>Client:</strong> Embedded in the host. Manages connections to MCP servers.</p>
+<p><strong>Server:</strong> Lightweight service exposing: <strong>Tools</strong> (functions), <strong>Resources</strong> (data), <strong>Prompts</strong> (templates).</p>
+<div class="co tip"><div class="co-h">💡 PRO TIP</div><div class="co-b">If googleadsagent.ai's 28 actions were an MCP server, ANY compatible app — Claude, ChatGPT, Cursor — could instantly manage Google Ads without custom code.</div></div>
+
+<h2>Resource Matrix</h2>
+<table><thead><tr><th>Resource</th><th>Format</th><th>Cost</th></tr></thead><tbody><tr><td>Google/Kaggle: Agent Tools & MCP</td><td>White Paper</td><td>Free</td></tr><tr><td>MCP Official Docs</td><td>Technical</td><td>Free — <a href='https://modelcontextprotocol.io'>modelcontextprotocol.io</a></td></tr><tr><td>MCP GitHub SDKs</td><td>Open Source</td><td>Free — <a href='https://github.com/modelcontextprotocol'>GitHub</a></td></tr><tr><td>MCP Server Directory</td><td>Directory</td><td>Free — mcp.so</td></tr><tr><td>Anthropic MCP Announcement</td><td>Blog</td><td>Free — anthropic.com</td></tr></tbody></table>
+
+<h2>Lab 2A: Observing Tool Use</h2>
+<pre><code>Search the web for the latest MCP announcements from the past\n30 days. Summarize the top 3 developments and analyze\nimplications for digital advertising.</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+<div class="co scr"><div class="co-h">💻 WHAT YOU SHOULD SEE</div><div class="co-b">Claude activates web search — 'Searching…' indicator appears. Results return with citations. This is the same pattern as googleadsagent.ai's 28 tool calls.</div></div>
+
+<h2>Lab 2B: Design a Tool Schema</h2>
+<pre><code>Design a tool schema for a Google Ads Search Term Analyzer.\nSpecify: (1) tool name + description, (2) typed input parameters,\n(3) structured output format, (4) error cases.\nFormat as JSON for an MCP server definition.</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+
+<h2>🎮 Vibe Coding: Zelda Adventure</h2>
+<pre><code>Build a Zelda-style top-down adventure game as a single HTML file.\n- Arrow keys/WASD movement, spacebar sword attack\n- Overworld: grass, trees, water, paths\n- 3+ enemy types with patterns and damage\n- 3 hearts, rupees, health pickups\n- Multiple connected rooms with edge transitions\n- Mini-map showing explored rooms\n- SNES pixel-art aesthetic</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+
+<div class="kt"><h4>✅ Key Takeaways</h4><ul><li>Tools transform an LLM from text generator into an agent that acts.</li><li>MCP standardizes AI-tool connections, eliminating custom integration.</li><li>Tool-use cycle: goal → reasoning → structured call → execution → result → synthesis.</li><li>MCP adoption by Google, OpenAI, Microsoft signals industry convergence.</li></ul></div>
+<div class="qz">
+<h4>🧪 Self-Assessment</h4>
+<div class="qq"><p>1. Explain MCP to a non-technical stakeholder using the USB-C analogy.</p>
+<textarea id="q2-0" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q2-h0" style="display:none">Before USB-C, every device needed its own cable. MCP does the same for AI — one standard way for any AI to connect to any tool, instead of building custom connections each time.</div></div><div class="qq"><p>2. Name the three MCP components and their roles.</p>
+<textarea id="q2-1" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q2-h1" style="display:none">Host (the AI app users interact with), Client (manages server connections inside the host), Server (exposes tools, resources, and prompts).</div></div><div class="qq"><p>3. Trace googleadsagent.ai's Search Term Manager through the tool-use cycle.</p>
+<textarea id="q2-2" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q2-h2" style="display:none">Goal: 'find wasted spend' → Reasoning: 'need search term data' → Call: search_term_manager with date_range, campaign_ids → Execution: tool_executor.py calls Google Ads API → Result: raw search terms with cost data → Synthesis: 'You're spending $3,200/mo on irrelevant terms.'</div></div>
+<button class="qb" onclick="showHints('q2',3)">CHECK MY THINKING</button>
+</div>
+</section><section class="pg" id="pg-day3">
+<h1>Day 3: <span class="g">Context Engineering</span></h1>
+<div class="co agt"><div class="co-h">🤖 GOOGLEADSAGENT.AI</div><div class="co-b">googleadsagent.ai's <strong>CEP Protocol</strong> (Clarifying Exchange Protocol) is context engineering in action: before any API call, the agent asks qualifying questions (Which account? ENABLED only? Date range? Spend threshold?). The Session & State Manager (Action #17) maintains state. Sub-agents write findings to shared context.</div></div>
+<div class="lo"><h4>🎯 Learning Objectives</h4><ul><li>Define context engineering vs. prompt engineering</li><li>Identify the six layers of agent context</li><li>Explain the scratchpad pattern for multi-step workflows</li><li>Describe RAG and its role in grounding responses</li><li>Compare five memory management strategies</li></ul></div>
+
+<h2>What Is Context Engineering?</h2>
+<p>The discipline of designing the <strong>complete information payload</strong> that flows into an agent's prompt at each step. It determines what the agent knows, remembers, and how it personalizes behavior.</p>
+<div class="co cit"><div class="co-h">📖 CITATION</div><div class="co-b"><em>"Context Engineering is concerned with the entire payload, dynamically constructing a state-aware prompt based on the user, conversation, and external data… transforming an agent from an expert on facts to an expert on the user."</em><br>— Google, 'Context Engineering' White Paper · <a href="https://kaggle.com/whitepaper-context-engineering-sessions-and-memory" target="_blank">source ↗</a></div></div>
+
+<h2>Six Layers of Context</h2>
+<table><thead><tr><th>Layer</th><th>Contents</th><th>googleadsagent.ai</th></tr></thead><tbody><tr><td>1. System Instructions</td><td>Identity, rules, capabilities</td><td>Main agent system prompt (The Loop)</td></tr><tr><td>2. User Profile</td><td>Identity, preferences, access</td><td>Account ID, credential pattern, permissions</td></tr><tr><td>3. Short-Term Memory</td><td>Current conversation</td><td>Active thread with Q&A</td></tr><tr><td>4. Long-Term Memory</td><td>Persistent cross-session</td><td>Previous audits, baselines</td></tr><tr><td>5. RAG</td><td>Documents pulled on demand</td><td>Google Ads docs, best practices</td></tr><tr><td>6. Tool Results</td><td>Data from tool execution</td><td>Live metrics, search terms, budgets</td></tr></tbody></table>
+
+<h2>The Scratchpad Pattern</h2>
+<p>Instead of raw conversation history (noisy, overflows context), the agent maintains a <strong>structured working document</strong>. In googleadsagent.ai: 🦁 Simba writes to Reporting section, ❄️ Elsa to Optimization, 🐠 Nemo to Research. Final synthesis reads the complete scratchpad.</p>
+
+<h2>RAG: Retrieval-Augmented Generation</h2>
+<p>Query a vector database, retrieve only semantically relevant chunks. Grounds responses in source material rather than potentially outdated training data. Scales to massive knowledge bases.</p>
+
+<h2>Memory Strategies</h2>
+<table><thead><tr><th>Strategy</th><th>Mechanism</th><th>Pro</th><th>Con</th></tr></thead><tbody><tr><td>Full History</td><td>Every message in each call</td><td>Maximum accuracy</td><td>Context overflow</td></tr><tr><td>Sliding Window</td><td>Keep recent N messages</td><td>Bounded memory</td><td>Loses early context</td></tr><tr><td>Summarization</td><td>Condense older messages</td><td>Preserves key facts</td><td>Info loss risk</td></tr><tr><td>Scratchpad</td><td>Structured findings doc</td><td>Best balance</td><td>Requires schema design</td></tr><tr><td>RAG</td><td>Vector DB retrieval</td><td>Scales massively</td><td>Infrastructure needed</td></tr></tbody></table>
+
+<h2>🎮 Vibe Coding: Football (Tecmo Bowl)</h2>
+<pre><code>Build an American football arcade game (Tecmo Bowl style)\nas a single HTML file.\n- Top-down field with yard lines and end zones\n- Arrow keys control QB/ball carrier\n- 5 offense vs 5 defense players\n- Play selection screen (4 plays)\n- Spacebar to pass, arrows to aim\n- Tackle detection, scoring, downs system\n- Touchdown celebration, 8-bit aesthetic</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+
+<div class="kt"><h4>✅ Key Takeaways</h4><ul><li>Context engineering is complete information management — broader than prompt engineering.</li><li>Six layers: system, user, short-term, long-term, RAG, tool results.</li><li>Scratchpad pattern: optimal efficiency-accuracy balance for multi-step agents.</li><li>CEP Protocol: qualifying questions before any API execution.</li></ul></div>
+<div class="qz">
+<h4>🧪 Self-Assessment</h4>
+<div class="qq"><p>1. Distinguish session memory from long-term memory.</p>
+<textarea id="q3-0" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q3-h0" style="display:none">Session memory = current conversation thread, resets when session ends. Long-term = persists across sessions (e.g., previous audit findings, account baselines).</div></div><div class="qq"><p>2. Describe the scratchpad pattern in googleadsagent.ai.</p>
+<textarea id="q3-1" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q3-h1" style="display:none">Each sub-agent writes findings to categorized sections (Reporting, Optimization, Research, Creative). The orchestrator reads the complete scratchpad for final synthesis instead of re-processing every conversation turn.</div></div><div class="qq"><p>3. List all six context layers with an example each.</p>
+<textarea id="q3-2" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q3-h2" style="display:none">1) System: 'You are an audit agent' 2) User: account_id=123 3) Short-term: current Q&A 4) Long-term: last audit found 40% wasted spend 5) RAG: Google Ads best practices doc 6) Tool results: live campaign metrics.</div></div>
+<button class="qb" onclick="showHints('q3',3)">CHECK MY THINKING</button>
+</div>
+</section><section class="pg" id="pg-day4">
+<h1>Day 4: <span class="g">Agent Quality</span></h1>
+<div class="co agt"><div class="co-h">🤖 GOOGLEADSAGENT.AI</div><div class="co-b">Quality mechanisms: (1) <strong>Top-Down Reporting</strong> validates details sum to account totals; (2) <strong>CONFIRM protocol</strong> requires user approval before mutations with current-vs-proposed preview; (3) Sub-agent principles: 🦁 'Summarize, don't dump' · ❄️ 'Preview before execute' · 🐠 'Insight over information.'</div></div>
+<div class="lo"><h4>🎯 Learning Objectives</h4><ul><li>Name the three pillars of agent quality</li><li>Explain LLM-as-a-Judge evaluation</li><li>Describe input, output, and action guardrails</li><li>Analyze why hallucination is dangerous in advertising</li><li>Identify key observability metrics</li></ul></div>
+
+<h2>The Quality Problem</h2>
+<p>A model hallucinating 5% of the time in casual conversation = minor annoyance. Hallucinating 5% while managing <strong>$50,000/month in ad spend</strong> = financial liability. Agent quality engineering closes this gap.</p>
+
+<h2>Three Pillars</h2>
+<h3>Pillar 1: Evaluation</h3>
+<p><strong>Unit:</strong> Test individual tool calls. Does Search Term Manager return accurate data?<br>
+<strong>Trajectory:</strong> Test reasoning path. Did it select the right tools in the right order?<br>
+<strong>Final Response:</strong> Is the audit report accurate and actionable?</p>
+
+<h3>Pillar 2: Observability</h3>
+<p><strong>Logging:</strong> Timestamped records of every tool call and decision (flight recorder).<br>
+<strong>Tracing:</strong> End-to-end path from input through all tool calls to output.<br>
+<strong>Metrics:</strong> Latency, token usage, tool success rate, accuracy.</p>
+
+<h3>Pillar 3: Guardrails</h3>
+<p><strong>Input:</strong> Validate requests fall within authorized scope.<br>
+<strong>Output:</strong> Verify responses for accuracy before delivery.<br>
+<strong>Action:</strong> Require human approval for high-impact operations. googleadsagent.ai's <strong>CONFIRM protocol</strong>: displays current vs. proposed, explains rationale, waits for confirmation before executing.</p>
+
+<h2>LLM-as-a-Judge</h2>
+<p>A separate LLM scores agent outputs against rubrics (accuracy, completeness, relevance, safety). Returns structured scores with justification. High correlation with human evaluators at dramatically lower cost.</p>
+
+<h2>Resource Matrix</h2>
+<table><thead><tr><th>Platform</th><th>Function</th><th>Cost</th></tr></thead><tbody><tr><td>LangSmith</td><td>LLM monitoring & tracing</td><td>Free tier</td></tr><tr><td>Braintrust</td><td>Evaluation platform</td><td>Free tier</td></tr><tr><td>Arize Phoenix</td><td>Open source tracing</td><td>Free (OSS)</td></tr><tr><td>RAGAS</td><td>RAG evaluation framework</td><td>Free (OSS)</td></tr></tbody></table>
+
+<h2>🎮 Vibe Coding: Super Mario Bros</h2>
+<pre><code>Build a Super Mario Bros-style platformer as a single HTML file.\n- Side-scrolling, arrow keys + spacebar jump\n- Platforms, pipes, bricks, question-mark blocks\n- Breakable blocks yield coins from below\n- 2+ enemy types, jump to defeat\n- Coin counter, score, pit death, 3 lives\n- Flag pole to complete level\n- NES-era physics: momentum, gravity, acceleration</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+
+<div class="kt"><h4>✅ Key Takeaways</h4><ul><li>Quality = Evaluation + Observability + Guardrails.</li><li>LLM-as-a-Judge: scalable, cost-effective evaluation against rubrics.</li><li>Hallucination in advertising = direct financial loss. Non-negotiable quality.</li><li>CONFIRM protocol: human checkpoints before data mutations.</li></ul></div>
+<div class="qz">
+<h4>🧪 Self-Assessment</h4>
+<div class="qq"><p>1. Name the three pillars and give an example of each.</p>
+<textarea id="q4-0" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q4-h0" style="display:none">Evaluation: unit-testing the Budget Manager action. Observability: tracing an audit from request to final report. Guardrails: CONFIRM protocol requiring user approval before pausing a campaign.</div></div><div class="qq"><p>2. Explain LLM-as-a-Judge in one paragraph.</p>
+<textarea id="q4-1" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q4-h1" style="display:none">A separate LLM receives the original query, the agent's response, and scoring criteria (accuracy 1-5, completeness 1-5, etc.). It evaluates the response against each criterion and returns structured scores with written justification. This scales evaluation beyond manual human review.</div></div><div class="qq"><p>3. Why is hallucination uniquely dangerous for ad budgets?</p>
+<textarea id="q4-2" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q4-h2" style="display:none">If an agent incorrectly reports campaign metrics, recommends pausing a profitable campaign, or miscalculates budget reallocation, real money is wasted. A 5% hallucination rate on $50K/month = $2,500/month in potential losses.</div></div><div class="qq"><p>4. Describe the CONFIRM protocol.</p>
+<textarea id="q4-3" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q4-h3" style="display:none">Before any write operation (bid change, campaign pause, keyword addition), the agent displays: 1) current state, 2) proposed change, 3) rationale. User must explicitly type CONFIRM to proceed. Includes rollback labeling for reversal.</div></div>
+<button class="qb" onclick="showHints('q4',4)">CHECK MY THINKING</button>
+</div>
+</section><section class="pg" id="pg-day5">
+<h1>Day 5: <span class="g">Production & Multi-Agent Systems</span></h1>
+<div class="co agt"><div class="co-h">🤖 GOOGLEADSAGENT.AI</div><div class="co-b"><strong>6 Disney-named sub-agents:</strong><br>🦁 <strong>Simba</strong> (Opus 4.5, 8 actions): Reporting — 'Summarize, don't dump.'<br>🐠 <strong>Nemo</strong> (Opus 4.5, 4 actions): Research — 'Insight over information.'<br>❄️ <strong>Elsa</strong> (Opus 4.5, 8 actions): Optimization — 'Preview before execute.'<br>🧞 <strong>Aladdin</strong> (Opus 4.5, 7 actions): Shopping/PMax — 'ROAS is king.'<br>🌊 <strong>Moana</strong> (Opus 4.5, 2 actions): Creative — 'Visual first.'<br>🤖 <strong>Baymax</strong> (Sonnet 4.5, 2 actions): Innovation — 'Receive → Process → Return.'</div></div>
+<div class="lo"><h4>🎯 Learning Objectives</h4><ul><li>Contrast prototype vs. production requirements</li><li>Define A2A and how it complements MCP</li><li>Trace a multi-agent audit through 6 sub-agents</li><li>Explain Google's Universal Commerce Protocol</li><li>Architect a complete multi-agent system</li></ul></div>
+
+<h2>The Prototype-to-Production Gap</h2>
+<p>Building a demo = cooking for friends. Deploying production = opening a restaurant.</p>
+<table><thead><tr><th>Dimension</th><th>Prototype</th><th>Production</th></tr></thead><tbody><tr><td>Error Handling</td><td>Crash + debug</td><td>Graceful fallbacks, retry, alerting</td></tr><tr><td>Auth</td><td>Hardcoded keys</td><td>OAuth 2.0, rotation, least-privilege</td></tr><tr><td>Monitoring</td><td>Manual logs</td><td>Real-time dashboards, anomaly detection</td></tr><tr><td>Scaling</td><td>Single user</td><td>Queue management, rate limiting</td></tr><tr><td>Testing</td><td>Manual</td><td>Automated suites, CI/CD</td></tr><tr><td>Privacy</td><td>Test data</td><td>PII handling, encryption, GDPR/CCPA</td></tr><tr><td>Cost</td><td>Unbounded</td><td>Token budgets, model routing, alerts</td></tr><tr><td>Human Oversight</td><td>None</td><td>CONFIRM protocol for critical actions</td></tr></tbody></table>
+
+<h2>Agent-to-Agent Protocol (A2A)</h2>
+<p>Google's open standard (April 2025) enabling agents to communicate regardless of framework or vendor. If MCP = USB-C for tools, <strong>A2A = telephone network for agents</strong>.</p>
+<div class="co cit"><div class="co-h">📖 CITATION</div><div class="co-b"><em>"A2A focuses on enabling agents to collaborate in their natural, unstructured modalities, even when they don't share memory, tools and context."</em><br>— Google Developers Blog, April 2025 · <a href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/" target="_blank">source ↗</a></div></div>
+
+<h2>MCP vs. A2A</h2>
+<table><thead><tr><th></th><th>MCP</th><th>A2A</th></tr></thead><tbody><tr><td>Purpose</td><td>Connect AI → Tools</td><td>Connect Agent → Agent</td></tr><tr><td>Analogy</td><td>USB-C</td><td>Telephone network</td></tr><tr><td>Relationship</td><td>Client → Server</td><td>Peer → Peer</td></tr><tr><td>Creator</td><td>Anthropic (Nov 2024)</td><td>Google (Apr 2025)</td></tr><tr><td>In googleadsagent.ai</td><td>28 tool actions</td><td>Sub-agent collaboration</td></tr></tbody></table>
+
+<h2>Architecture Walkthrough: "Audit my Google Ads account"</h2>
+<div class="st"><div class="sn">1</div><div class="sb"><strong>User → Orchestrator:</strong> CEP Protocol activates. 'Which account? Date range? Threshold?'</div></div><div class="st"><div class="sn">2</div><div class="sb"><strong>→ 🦁 Simba (Reporting):</strong> Pulls account-level data. 'Summarize, don't dump.' → '3 campaigns with 0 conversions, $2,400 spend.'</div></div><div class="st"><div class="sn">3</div><div class="sb"><strong>→ 🐠 Nemo (Research):</strong> Analyzes search terms + competitive landscape. → '62% irrelevant queries. "free" in 28%.'</div></div><div class="st"><div class="sn">4</div><div class="sb"><strong>→ ❄️ Elsa (Optimization):</strong> Evaluates bids, budgets, recommendations. → 'Reallocate $3,200/mo for +28% ROAS.'</div></div><div class="st"><div class="sn">5</div><div class="sb"><strong>→ 🌊 Moana (Creative):</strong> Reviews ad assets. → '8 ads Poor/Average strength. 4 campaigns missing RSAs.'</div></div><div class="st"><div class="sn">6</div><div class="sb"><strong>Orchestrator Synthesizes:</strong> Reads scratchpad, cross-validates totals, resolves contradictions, compiles unified report with prioritized recommendations.</div></div>
+
+<h2>Google's Agentic Commerce Vision</h2>
+<div class="co cit"><div class="co-h">📖 CITATION</div><div class="co-b"><em>"Announced Universal Commerce Protocol (UCP) for agentic commerce — compatible with A2A, Agent Payments Protocol, MCP. Built with Shopify, Etsy, Wayfair, Target, Walmart."</em><br>— Sundar Pichai, NRF 2026 (Jan 12, 2026) · <a href="https://blog.google/company-news/inside-google/message-ceo/nrf-2026-remarks/" target="_blank">source ↗</a></div></div>
+
+<h2>🎮 Vibe Coding: Duck Hunt</h2>
+<pre><code>Build a Duck Hunt-style shooting gallery as a single HTML file.\n- Click to shoot flying ducks\n- Randomized flight patterns, crosshair cursor\n- Gunshot sound + muzzle flash (Web Audio API)\n- Hit ducks tumble, dog retrieves\n- 10 ducks/round, 3 rounds, increasing difficulty\n- 3 shots per duck, score + accuracy %\n- Classic NES aesthetic</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+
+<h2>🎮 Capstone: AI Game Master RPG</h2>
+<pre><code>Build an AI-powered text RPG Game Master as a single HTML file.\n- Character creation: name, class (Warrior/Mage/Rogue)\n- Stats: HP, Attack, Defense, Magic, Level, XP\n- Inventory with equippable items + consumables\n- Turn-based combat with enemy AI\n- Adaptive narrative (3+ branching points)\n- Shop between encounters\n- Boss encounter, HP bars, dark-fantasy styling, save/load</code><button class="cp" onclick="copyCode(this)">COPY</button></pre>
+<div class="callout agent"><div class="co-h">🤖 WHY THIS IS AGENTIC</div><div class="co-b">Brain (game AI) + Tools (combat calc, inventory, story engine) + Memory (character state, story progress) + Orchestration (all systems simultaneously) = the same architecture as googleadsagent.ai, applied to games.</div></div>
+
+<div class="kt"><h4>✅ Key Takeaways</h4><ul><li>Production = error handling, auth, monitoring, scaling, testing, privacy, cost, human oversight.</li><li>MCP connects agents to tools. A2A connects agents to each other. Complementary.</li><li>Multi-agent systems: specialized sub-agents coordinated by orchestrator.</li><li>Google's UCP: agents as direct participants in commerce transactions.</li></ul></div>
+<div class="qz">
+<h4>🧪 Self-Assessment</h4>
+<div class="qq"><p>1. Contrast MCP and A2A using the USB-C vs. telephone-network analogy.</p>
+<textarea id="q5-0" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q5-h0" style="display:none">MCP = USB-C: standardizes how AI connects to tools/peripherals. A2A = telephone network: standardizes how independent agents communicate and collaborate. You need both — peripherals AND communication.</div></div><div class="qq"><p>2. Trace how the 6 sub-agents collaborate on an audit.</p>
+<textarea id="q5-1" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q5-h1" style="display:none">Orchestrator receives request → CEP clarifies → Simba pulls performance data → Nemo analyzes search terms → Elsa evaluates optimization opportunities → Moana reviews creatives → Orchestrator reads all scratchpad sections, cross-validates, synthesizes final report.</div></div><div class="qq"><p>3. Name each sub-agent, its model, and governing principle.</p>
+<textarea id="q5-2" placeholder="Type your answer..."></textarea>
+<div class="qh" id="q5-h2" style="display:none">Simba (Opus 4.5): 'Summarize, don't dump.' Nemo (Opus 4.5): 'Insight over information.' Elsa (Opus 4.5): 'Preview before execute.' Aladdin (Opus 4.5): 'ROAS is king.' Moana (Opus 4.5): 'Visual first.' Baymax (Sonnet 4.5): 'Receive → Process → Return.'</div></div>
+<button class="qb" onclick="showHints('q5',3)">CHECK MY THINKING</button>
+</div>
+</section><section class="pg" id="pg-appendixA">
+<h1>Appendix A: <span class="g">Complete Resource Library</span></h1>
+<h2>Google/Kaggle White Papers</h2>
+<table><thead><tr><th>#</th><th>Title</th><th>Access</th></tr></thead><tbody><tr><td>1</td><td>Introduction to Agents</td><td><a href='https://kaggle.com/whitepaper-agents'>kaggle.com ↗</a></td></tr><tr><td>2</td><td>Agent Tools & MCP</td><td>Google Agents Intensive</td></tr><tr><td>3</td><td>Context Engineering</td><td><a href='https://kaggle.com/whitepaper-context-engineering-sessions-and-memory'>Kaggle ↗</a></td></tr><tr><td>4</td><td>Agent Quality</td><td>Google Agents Intensive</td></tr><tr><td>5</td><td>Prototype to Production</td><td>Google Agents Intensive</td></tr></tbody></table>
+<p>All 5 compiled: <a href="https://github.com/sameeerjadhav/google-agents-resources" target="_blank">github.com/sameeerjadhav/google-agents-resources ↗</a></p>
+
+<h2>Free Courses</h2>
+<table><thead><tr><th>Provider</th><th>Course</th><th>Certificate</th></tr></thead><tbody><tr><td>Microsoft</td><td><a href='https://github.com/microsoft/ai-agents-for-beginners'>AI Agents for Beginners (12 lessons)</a></td><td>No</td></tr><tr><td>Hugging Face</td><td><a href='https://huggingface.co/learn/agents-course'>AI Agents Course</a></td><td>Yes</td></tr><tr><td>DeepLearning.AI</td><td><a href='https://deeplearning.ai/short-courses'>Agents in LangGraph</a></td><td>Yes</td></tr><tr><td>Agent Academy</td><td><a href='https://agentacademy.ai'>Understanding Agentic AI</a></td><td>Yes</td></tr></tbody></table>
+
+<h2>Protocols</h2>
+<table><thead><tr><th>Protocol</th><th>Creator</th><th>Date</th><th>Docs</th></tr></thead><tbody><tr><td>MCP</td><td>Anthropic</td><td>Nov 2024</td><td><a href='https://modelcontextprotocol.io'>modelcontextprotocol.io ↗</a></td></tr><tr><td>A2A</td><td>Google</td><td>Apr 2025</td><td><a href='https://google.github.io/A2A'>google.github.io/A2A ↗</a></td></tr><tr><td>UCP</td><td>Google</td><td>Jan 2026</td><td>Announced at NRF 2026</td></tr></tbody></table>
+
+<h2>Frameworks</h2>
+<table><thead><tr><th>Framework</th><th>Language</th><th>URL</th></tr></thead><tbody><tr><td>Google ADK</td><td>Python</td><td><a href='https://github.com/google/adk-python'>GitHub ↗</a></td></tr><tr><td>LangGraph</td><td>Python/JS</td><td><a href='https://langchain.com/langgraph'>langchain.com ↗</a></td></tr><tr><td>CrewAI</td><td>Python</td><td><a href='https://crewai.com'>crewai.com ↗</a></td></tr><tr><td>AutoGen</td><td>Python</td><td><a href='https://github.com/microsoft/autogen'>GitHub ↗</a></td></tr></tbody></table>
+
+<h2>Observability</h2>
+<table><thead><tr><th>Platform</th><th>Type</th><th>URL</th></tr></thead><tbody><tr><td>LangSmith</td><td>Monitoring</td><td><a href='https://langsmith.com'>langsmith.com ↗</a></td></tr><tr><td>Braintrust</td><td>Evaluation</td><td><a href='https://braintrust.dev'>braintrust.dev ↗</a></td></tr><tr><td>Arize Phoenix</td><td>Tracing (OSS)</td><td><a href='https://github.com/Arize-ai/phoenix'>GitHub ↗</a></td></tr><tr><td>RAGAS</td><td>RAG Eval (OSS)</td><td><a href='https://ragas.io'>ragas.io ↗</a></td></tr></tbody></table>
+</section><section class="pg" id="pg-glossary">
+<h1>Appendix B: <span class="g">Glossary</span></h1>
+<p>22 key terms.</p>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td><strong>A2A</strong></td><td>Google's open standard for agent-to-agent communication regardless of framework.</td></tr><tr><td><strong>Agent</strong></td><td>Software using an LLM to autonomously perceive, reason, decide, and act.</td></tr><tr><td><strong>CEP Protocol</strong></td><td>Clarifying Exchange Protocol — googleadsagent.ai's pre-execution qualifying questions.</td></tr><tr><td><strong>CONFIRM Protocol</strong></td><td>Write-safety requiring user approval before mutations, with current-vs-proposed preview.</td></tr><tr><td><strong>Context Engineering</strong></td><td>Designing the complete information payload flowing into an agent's prompt.</td></tr><tr><td><strong>Context Window</strong></td><td>Maximum text (tokens) an LLM processes in one interaction.</td></tr><tr><td><strong>Foundation Model</strong></td><td>The LLM serving as an agent's reasoning engine (Claude, GPT-4, Gemini).</td></tr><tr><td><strong>Guardrails</strong></td><td>Safety mechanisms (input, output, action) constraining agent behavior.</td></tr><tr><td><strong>Hallucination</strong></td><td>When AI confidently produces incorrect or fabricated information.</td></tr><tr><td><strong>LLM-as-a-Judge</strong></td><td>Using a separate LLM to evaluate agent outputs against rubrics.</td></tr><tr><td><strong>MCP</strong></td><td>Anthropic's standard for universally connecting AI to tools and data.</td></tr><tr><td><strong>Multi-Agent System</strong></td><td>Multiple specialized agents collaborating on complex tasks.</td></tr><tr><td><strong>Orchestrator</strong></td><td>Coordinating agent that delegates to sub-agents and synthesizes outputs.</td></tr><tr><td><strong>RAG</strong></td><td>Retrieval-Augmented Generation — searching vector DBs for relevant context.</td></tr><tr><td><strong>ReAct Loop</strong></td><td>Reason → Act → Observe → Repeat. Core agent orchestration pattern.</td></tr><tr><td><strong>Scratchpad</strong></td><td>Structured working document of categorized findings during multi-step tasks.</td></tr><tr><td><strong>Sub-Agent</strong></td><td>Specialized agent for one domain (e.g., 🦁 Simba for Reporting).</td></tr><tr><td><strong>The Loop</strong></td><td>googleadsagent.ai's architecture: ask → clarify → execute → validate → loop.</td></tr><tr><td><strong>Tool</strong></td><td>Executable function extending agent capabilities beyond text generation.</td></tr><tr><td><strong>Top-Down Reporting</strong></td><td>Validation: account summary first, details must sum to totals.</td></tr><tr><td><strong>UCP</strong></td><td>Universal Commerce Protocol — Google's standard for agentic commerce.</td></tr><tr><td><strong>Vibe Coding</strong></td><td>Building software through natural-language description (Karpathy, 2025).</td></tr></tbody></table>
+</section><section class="pg" id="pg-appendixC">
+<h1>Appendix C: <span class="g">googleadsagent.ai Technical Reference</span></h1>
+<table><thead><tr><th>Component</th><th>Specification</th></tr></thead><tbody><tr><td>Foundation Model</td><td>Claude by Anthropic (Opus 4.5 + Sonnet 4.5)</td></tr><tr><td>Tools</td><td>28 Python API actions with live Google Ads read/write</td></tr><tr><td>Sub-Agents</td><td>6 Disney-named specialists</td></tr><tr><td>Credential Patterns</td><td>A (5-key, 12 actions) · B (4-key, 13) · C (Cloudinary, 1) · D (none, 2)</td></tr><tr><td>Safety</td><td>CONFIRM protocol with current-vs-proposed + rollback labeling</td></tr><tr><td>Context</td><td>CEP Protocol + Session State Manager (Action #17)</td></tr><tr><td>Validation</td><td>Top-Down Reporting: details cross-validated against totals</td></tr><tr><td>Deployment</td><td>CLI · REST API · Docker · Python SDK</td></tr><tr><td>Repository</td><td>66 files, 12 directories</td></tr><tr><td>License</td><td>Open source</td></tr><tr><td>URL</td><td><a href='{SITE}'>{SITE}</a></td></tr></tbody></table>
+
+<h2>Sub-Agent Specifications</h2>
+<table><thead><tr><th></th><th>Name</th><th>Model</th><th>Actions</th><th>Domain</th><th>Principle</th></tr></thead><tbody><tr><td>🦁</td><td>Simba</td><td>Opus 4.5</td><td>8</td><td>Reporting</td><td>'Summarize, don't dump.'</td></tr><tr><td>🐠</td><td>Nemo</td><td>Opus 4.5</td><td>4</td><td>Research</td><td>'Insight over information.'</td></tr><tr><td>❄️</td><td>Elsa</td><td>Opus 4.5</td><td>8</td><td>Optimization</td><td>'Preview before execute.'</td></tr><tr><td>🧞</td><td>Aladdin</td><td>Opus 4.5</td><td>7</td><td>Shopping/PMax</td><td>'ROAS is king.'</td></tr><tr><td>🌊</td><td>Moana</td><td>Opus 4.5</td><td>2</td><td>Creative</td><td>'Visual first.'</td></tr><tr><td>🤖</td><td>Baymax</td><td>Sonnet 4.5</td><td>2</td><td>Innovation</td><td>'Receive → Process → Return.'</td></tr></tbody></table>
+
+<h2>All 28 Actions</h2>
+<table><thead><tr><th>#</th><th>Action</th><th>Category</th><th>Cred</th></tr></thead><tbody><tr><td>01</td><td>Label Manager</td><td>Organization</td><td>A</td></tr><tr><td>02</td><td>Conversion Tracking</td><td>Analysis</td><td>A</td></tr><tr><td>03</td><td>Audience Manager</td><td>Targeting</td><td>B</td></tr><tr><td>04</td><td>Asset Manager</td><td>Organization</td><td>B</td></tr><tr><td>05</td><td>Budget Manager</td><td>Campaign</td><td>B</td></tr><tr><td>06</td><td>RSA Ad Manager</td><td>Campaign</td><td>B</td></tr><tr><td>07</td><td>Bid & Keyword Manager</td><td>Campaign</td><td>B</td></tr><tr><td>08</td><td>Negative Keywords</td><td>Organization</td><td>B</td></tr><tr><td>09</td><td>Campaign & Ad Group Mgr</td><td>Campaign</td><td>B</td></tr><tr><td>10</td><td>Google Ads Mutate</td><td>Campaign</td><td>B</td></tr><tr><td>11</td><td>Account Access Checker</td><td>Infrastructure</td><td>B</td></tr><tr><td>12</td><td>Scripts Manager</td><td>Infrastructure</td><td>A</td></tr><tr><td>13</td><td>Experiments Manager</td><td>Optimization</td><td>A</td></tr><tr><td>14</td><td>Package Installer</td><td>Infrastructure</td><td>D</td></tr><tr><td>15</td><td>Check User Access</td><td>Infrastructure</td><td>B</td></tr><tr><td>16</td><td>API Gateway</td><td>Infrastructure</td><td>B</td></tr><tr><td>17</td><td>Session & State Manager</td><td>Infrastructure</td><td>D</td></tr><tr><td>18</td><td>Cloudinary Creative</td><td>Creative</td><td>C</td></tr><tr><td>19</td><td>Query Planner</td><td>Analysis</td><td>A</td></tr><tr><td>20</td><td>Recommendations Manager</td><td>Optimization</td><td>A</td></tr><tr><td>21</td><td>Search Term Manager</td><td>Analysis</td><td>B</td></tr><tr><td>22</td><td>Geo & Location Manager</td><td>Targeting</td><td>B</td></tr><tr><td>23</td><td>Device Performance</td><td>Analysis</td><td>A</td></tr><tr><td>24</td><td>Change History Manager</td><td>Analysis</td><td>A</td></tr><tr><td>25</td><td>Campaign Creator</td><td>Campaign</td><td>A</td></tr><tr><td>26</td><td>Ad Schedule Manager</td><td>Optimization</td><td>A</td></tr><tr><td>27</td><td>Bidding Strategy Manager</td><td>Optimization</td><td>A</td></tr><tr><td>28</td><td>PMax Asset Group Mgr</td><td>PMax</td><td>A</td></tr></tbody></table>
+</section><section class="pg" id="pg-refs">
+<h1>References <span class="dim">(APA 7th Edition)</span></h1>
+<div class="ref-list">
+<p>Alphabet Inc. (2025, July 23). Q2 2025 earnings call transcript. <a href="https://abc.xyz/investor/">https://abc.xyz/investor/</a></p>
+<p>Anthropic. (2024, November). Introducing the Model Context Protocol. <a href="https://anthropic.com/news/model-context-protocol">https://anthropic.com/news/model-context-protocol</a></p>
+<p>Google. (2025). <em>Introduction to agents</em> [White paper]. Kaggle. <a href="https://kaggle.com/whitepaper-agents">https://kaggle.com/whitepaper-agents</a></p>
+<p>Google. (2025). <em>Agent tools and interoperability with MCP</em> [White paper]. Kaggle Agents Intensive.</p>
+<p>Google. (2025). <em>Context engineering: Sessions and memory</em> [White paper]. Kaggle.</p>
+<p>Google. (2025). <em>Agent quality</em> [White paper]. Kaggle Agents Intensive.</p>
+<p>Google. (2025). <em>Prototype to production</em> [White paper]. Kaggle Agents Intensive.</p>
+<p>Google. (2025, April 9). Announcing the Agent2Agent Protocol. <em>Google Developers Blog</em>. <a href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/">developers.googleblog.com</a></p>
+<p>Google. (2025, April 9). Cloud Next 2025 announcements. <em>Google Blog</em>. <a href="https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/next-2025/">blog.google</a></p>
+<p>Google DeepMind. (2025, March 6). Gemini 2.0: Built for the agentic era. <em>Google Blog</em>.</p>
+<p>Karpathy, A. (2025, February). Vibe coding [Post]. X. <a href="https://x.com/karpathy">https://x.com/karpathy</a></p>
+<p>Microsoft. (2025). <em>AI agents for beginners</em> [Course]. GitHub. <a href="https://github.com/microsoft/ai-agents-for-beginners">github.com</a></p>
+<p>Pichai, S. (2025, May 20). Google I/O 2025 keynote. <em>Google Blog</em>. <a href="https://blog.google/innovation-and-ai/technology/ai/io-2025-keynote/">blog.google</a></p>
+<p>Pichai, S. (2026, January 12). NRF 2026 remarks. <em>Google Blog</em>. <a href="https://blog.google/company-news/inside-google/message-ceo/nrf-2026-remarks/">blog.google</a></p>
+<p>Yao, S., et al. (2022). ReAct: Synergizing reasoning and acting in language models. <em>arXiv</em>. <a href="https://arxiv.org/abs/2210.03629">arxiv.org/abs/2210.03629</a></p>
+</div>
+</section><section class="pg" id="pg-about">
+<h1>About the Author</h1>
+<p><strong>John Williams</strong> is a Senior Paid Media Specialist at <a href="https://seerinteractive.com" target="_blank">Seer Interactive</a> with 15+ years managing $48M+ in digital advertising spend across Google Ads, Meta, Microsoft, Amazon, and other platforms. Previous: NortonLifeLock (192% YoY paid search growth), Gen Digital, Avast, Farmers Insurance.</p>
+<p>Creator of <a href="https://googleadsagent.ai" target="_blank">googleadsagent.ai</a> — open-source AI agent with 28 API actions and 6 sub-agents. Operates "It All Started With A Idea," his consultancy and product studio. Speaker at <a href="https://paidsearch.org/event/hero-conf-2025-san-diego/" target="_blank">Hero Conf 2025</a>. 19+ open-source marketing automation tools on GitHub.</p>
+<p>Assistant football coach at Casteel High School (WR, DB, special teams). Former Washington State University football player (2002–2005).</p>
+<hr>
+<p class="ctr dim"><em>This course is free and open source. Share it. Teach it. Fork it.<br>The future of AI agents belongs to everyone.</em></p>
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px">
+<a href="https://github.com/itallstartedwithaidea/ai-agents-crash-course" target="_blank" class="btn pri" style="display:inline-block">↗ GITHUB</a>
+<a href="https://www.linkedin.com/posts/johnmichaelwilliams_ai-agent-crash-course-by-googeladsagentai-ugcPost-7431927834031431680-hul9?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAnRhHoBx-6mp4f4ZEwKYTwJ83yt2kMbM5I" target="_blank" class="btn sec" style="display:inline-block">↗ LINKEDIN</a>
+<a href="https://googleadsagent.ai" target="_blank" class="btn sec" style="display:inline-block">↗ AGENT</a>
+<a href="https://linkedin.com/in/johnmichaelwilliams" target="_blank" class="btn sec" style="display:inline-block">↗ PROFILE</a>
+</div>
+</section></main>
+<script>
+const pages=document.querySelectorAll('.pg');
+const links=document.querySelectorAll('#sb nav a:not([target])');
+const order=["home","preface","summary","setup","day1","day2","day3","day4","day5","appendixA","glossary","appendixC","refs","about"];
+function go(id){
+  pages.forEach(p=>p.classList.remove('active'));
+  links.forEach(a=>a.classList.remove('active'));
+  const el=document.getElementById('pg-'+id);
+  if(el){el.classList.add('active');window.scrollTo(0,0);}
+  links.forEach(a=>{if(a.getAttribute('onclick')&&a.getAttribute('onclick').includes("'"+id+"'"))a.classList.add('active');});
+  const i=order.indexOf(id);
+  document.getElementById('pb').style.width=((i+1)/order.length*100)+'%';
+  document.getElementById('sb').classList.remove('open');
+  return false;
+}
+function copyCode(btn){
+  const code=btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(code);
+  btn.textContent='COPIED';
+  setTimeout(()=>btn.textContent='COPY',1500);
+}
+function showHints(qid,n){
+  for(let i=0;i<n;i++){
+    const h=document.getElementById(qid+'-h'+i);
+    if(h)h.style.display=h.style.display==='none'?'block':'none';
+  }
+}
+</script>
+</body>
+</html>
