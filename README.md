@@ -10,16 +10,19 @@
 </p>
 
 <p align="center">
-  <a href="https://googleadsagent.ai"><img src="https://img.shields.io/badge/Live_Agent-googleadsagent.ai-00C853?style=for-the-badge" alt="googleadsagent.ai"></a>
+  <a href="https://googleadsagent.ai/course/"><img src="https://img.shields.io/badge/Live_Course-googleadsagent.ai/course-00C853?style=for-the-badge" alt="Live Course"></a>
+  <a href="https://googleadsagent.ai"><img src="https://img.shields.io/badge/Live_Agent-googleadsagent.ai-F0A830?style=for-the-badge" alt="googleadsagent.ai"></a>
   <img src="https://img.shields.io/badge/Pages-42-0A0A0A?style=for-the-badge" alt="42 Pages">
-  <img src="https://img.shields.io/badge/Words-10,000+-0A0A0A?style=for-the-badge" alt="10K+ Words">
   <img src="https://img.shields.io/badge/Cost-FREE-00C853?style=for-the-badge" alt="Free">
   <img src="https://img.shields.io/badge/License-MIT-1565C0?style=for-the-badge" alt="MIT">
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Google/Kaggle-5_White_Papers-4285F4?style=flat-square&logo=google" alt="White Papers">
+  <img src="https://img.shields.io/badge/Anthropic_Academy-13_Courses-CC785C?style=flat-square" alt="Anthropic Academy">
   <img src="https://img.shields.io/badge/Claude-Built_on_Anthropic-000000?style=flat-square" alt="Claude">
+  <img src="https://img.shields.io/badge/Interactive_Quizzes-6_Quizzes-FF6B35?style=flat-square" alt="Quizzes">
+  <img src="https://img.shields.io/badge/XP_+_Badges-Gamified-7C3AED?style=flat-square" alt="Gamification">
   <img src="https://img.shields.io/badge/API_Actions-28-00C853?style=flat-square" alt="28 Actions">
   <img src="https://img.shields.io/badge/Sub--Agents-6-7C3AED?style=flat-square" alt="6 Sub-Agents">
   <img src="https://img.shields.io/badge/Game_Projects-5+Capstone-C62828?style=flat-square" alt="Games">
@@ -34,6 +37,14 @@
 A **free, open-source, 42-page crash course** on building AI agents — written by **John Williams**, Senior Paid Media Specialist at [Seer Interactive](https://seerinteractive.com) with 15+ years managing $48M+ in digital advertising spend, and creator of [googleadsagent.ai](https://googleadsagent.ai).
 
 Every concept explained with accessible analogies. Every step verified with "What You Should See" callouts. Every day ends with a playable video game built through natural-language prompting. Formatted in APA 7th Edition with 16 formal references.
+
+### What's New in v5.0 (March 2026)
+
+- **Anthropic Academy Integration** — 13 free courses with certificates linked throughout, including Claude 101, Claude Code in Action, MCP courses, AI Fluency, and Agent Skills
+- **Interactive MCQ Quizzes** — 6 graded quizzes (21 total questions) replace text-area assessments with instant feedback and scoring
+- **XP & Gamification System** — Earn XP for completing days and quizzes, level up from Novice to Master, earn 6 achievement badges
+- **Daily Streak Tracking** — Return daily to build your streak; 3-day streaks unlock badges
+- **New Products Coverage** — Claude Code, Claude Cowork (Jan 2026), Agent Skills, MCP updates
 
 ---
 
@@ -140,9 +151,48 @@ Full bibliography in [`resources/REFERENCES.md`](resources/REFERENCES.md)
 
 ---
 
+## 🎓 Anthropic Academy — Free Courses
+
+All 13 courses are free with certificates on [Anthropic Academy (Skilljar)](https://anthropic.skilljar.com/):
+
+| Course | Focus | Level |
+|--------|-------|-------|
+| **[Claude Code in Action](https://anthropic.skilljar.com/claude-code-in-action)** | AI coding assistant, GitHub, MCP servers, hooks, SDK | Intermediate |
+| **[Claude 101](https://anthropic.skilljar.com/claude-101)** | Chat, Cowork, Code modes, Projects, Artifacts, Skills | Beginner |
+| **AI Fluency: Framework & Foundations** | The Four Ds — Delegation, Description, Discernment, Diligence | All levels |
+| **Building with the Claude API** | API calls, streaming, function calling, structured outputs | Developer |
+| **Intro to Model Context Protocol** | MCP servers/clients in Python, tools, resources, prompts | Developer |
+| **MCP: Advanced Topics** | Sampling, notifications, file system, transport mechanisms | Advanced |
+| **Introduction to Agent Skills** | Build and share `SKILL.md` workflows in Claude Code | Developer |
+| **AI Fluency for Educators** | AI Fluency in teaching and institutional strategy | Educators |
+| **AI Fluency for Students** | AI skills for learning and career planning | Students |
+| **AI Fluency for Nonprofits** | AI fluency for mission-driven organizations | Nonprofits |
+| **Teaching AI Fluency** | Teaching and assessing AI Fluency in instructor-led settings | Instructors |
+| **Claude with Amazon Bedrock** | Anthropic models on AWS | Cloud |
+| **Claude with Google Cloud Vertex AI** | Anthropic models on Google Cloud | Cloud |
+
+---
+
+## 🎮 Gamification & Interactive Quizzes
+
+The [live course](https://googleadsagent.ai/course/) includes:
+
+| Feature | Details |
+|---------|---------|
+| **MCQ Quizzes** | 6 quizzes, 21 questions, instant grading with feedback |
+| **XP System** | Earn XP for completing days (20 XP each) and quizzes (30-50 XP each) |
+| **6 Levels** | 🔰 Novice → 📘 Learner → 🔧 Builder → ⚡ Practitioner → 🏗️ Architect → 👑 Master |
+| **6 Badges** | 🎯 First Quiz · 💯 Perfect Score · 🏆 All Days · 🔥 3-Day Streak · 🎓 Academy · ⭐ Completionist |
+| **Daily Streaks** | Visit daily to build your streak counter |
+| **Progress Tracking** | All progress saved locally in your browser |
+
+---
+
 ## 🔗 Essential Resources
 
 **White Papers** — [All 5 Google/Kaggle Papers](https://github.com/sameeerjadhav/google-agents-resources) · [Intro to Agents](https://kaggle.com/whitepaper-agents)
+
+**Anthropic Academy** — [Claude Code in Action](https://anthropic.skilljar.com/claude-code-in-action) · [Claude 101](https://anthropic.skilljar.com/claude-101) · [All 13 Courses](https://anthropic.skilljar.com/)
 
 **Protocols** — [MCP Docs](https://modelcontextprotocol.io) · [A2A Docs](https://google.github.io/A2A)
 
@@ -191,6 +241,6 @@ MIT License. Share it. Teach it. Fork it. The future of AI agents belongs to eve
 ---
 
 <p align="center">
-  <code>Version 4.0 · February 2026 · Free & Open Source</code><br>
-  <a href="https://googleadsagent.ai">googleadsagent.ai</a> · It All Started With A Idea
+  <code>Version 5.0 · March 2026 · Free & Open Source</code><br>
+  <a href="https://googleadsagent.ai/course/">googleadsagent.ai/course</a> · <a href="https://googleadsagent.ai">googleadsagent.ai</a> · It All Started With A Idea
 </p>
