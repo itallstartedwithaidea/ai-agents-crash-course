@@ -5,6 +5,16 @@
 <h1 align="center">The Complete 5-Day<br>AI Agents Crash Course</h1>
 
 <p align="center">
+  <a href="README.md"><strong>English</strong></a> ·
+  <a href="README.fr.md">Français</a> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.zh.md">中文</a> ·
+  <a href="README.nl.md">Nederlands</a> ·
+  <a href="README.ru.md">Русский</a> ·
+  <a href="README.ko.md">한국어</a>
+</p>
+
+<p align="center">
   <strong>From Absolute Zero to Deploying Multi-Agent Systems</strong><br>
   <em>A Step-by-Step Tutorial for Every Experience Level</em>
 </p>
